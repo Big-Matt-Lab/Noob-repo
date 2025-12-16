@@ -1,72 +1,63 @@
 """Opening Docstring
 Rock, Paper, Scissors game"""
 
-# emoji's U+270A,B,C
 # start the game
 # import random for computer choice
 import random
 
-# set tally variables
-win = 0
-loss = 0
-ties = 0
-again = True
-while again:
+# Constants for readability
+ROCK = "\u270a"
+PAPER = "\u270b"
+SCISSORS = "\u270c"
 
+# Dictionary maps user input keys to the display emojis
+MOVES = {"r": ROCK, "p": PAPER, "s": SCISSORS}
+
+# Tally variables
+wins = 0
+losses = 0
+ties = 0
+
+# Welcome message
+
+print(f"Rock, Paper, Scissors Game\n{ROCK} {PAPER} {SCISSORS}")
+while True:
     # generate computer choice
-    comp_choice = random.choice(["rock", "paper", "scissors"])
-    if comp_choice[0] == "r":
-        comp_choice = '\u270A'
-    elif comp_choice[0] == "p":
-        comp_choice = '\u270B'
-    elif comp_choice[0] == "s":
-        comp_choice = '\u270C'
+    comp_choice = random.choice(list(MOVES.values()))
 
     # players choice
-    players_choice = input("Choose Rock, Paper or Scissors(R,P,S):").lower()
-    if players_choice == "r":
-        players_choice = '\u270A'
-    elif players_choice == "p":
-        players_choice = '\u270B'
-    elif players_choice == "s":
-        players_choice = '\u270C'
+    user_input = input("\nChoose (R)ock, (P)aper or (S)cissors:").lower().strip()
+    if user_input and user_input[0] in MOVES:
+        players_choice = MOVES[user_input[0]]
     else:
-        print("Invalid entry. Please try again.")
+        print("Invalid entry. Please try R, P, or S.")
         continue
 
     # print the choices
     print(f"You chose {players_choice} and the computer chose {comp_choice}.")
 
     # evaluate the choices
-    if players_choice == "\u270A" and comp_choice == "\u270C":
-        print("You win!")
-        print("Good choice!")
-        win += 1
-    elif players_choice == "\u270B" and comp_choice == "\u270A":
-        print("You win!")
-        print("Try again!")
-        win += 1
-    elif players_choice == "\u270C" and comp_choice == "\u270B":
-        print("You win!")
-        win += 1
-    elif players_choice == comp_choice:
+    if players_choice == comp_choice:
         print(f"You both chose {comp_choice}. Draw!")
         ties += 1
+    elif (players_choice == ROCK and comp_choice == SCISSORS) or \
+        (players_choice == PAPER and comp_choice == ROCK) or \
+        (players_choice == SCISSORS and comp_choice == PAPER):
+        print("You win!")
+        print("Congratulations!")
+        wins += 1
     else:
         print("You lose!")
         print("Better luck next time!")
-        loss += 1
+        losses += 1
 
     # play again
-    play_again = input("Play again? Y or N:").lower()
-    if play_again == "y":
-        again = True
-    else:
+    if not input("Play again? Y or N: ").lower().startswith("y"):
         break
 # End of loop
 # Tally up the wins and losses
-print(f"You won {win} times.")
-print(f"You lost {loss} times.")
+print(f"You won {wins} times.")
+print(f"You lost {losses} times.")
 print(f"You tied {ties} times.")
 print("Thanks for playing!")
 # EOF
