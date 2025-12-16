@@ -1,0 +1,28 @@
+"""
+Docstring for Noob-repo.qr_codes
+"""
+# Import packages
+import qrcode
+from qrcode.constants import ERROR_CORRECT_H
+
+# 1. Create a QRCode object with specific parameters
+qr = qrcode.QRCode(
+    version=1,  # Controls the size; version 1 is 21x21 modules
+    error_correction=ERROR_CORRECT_H,  # High error correction (up to 30% errors can be corrected)
+    box_size=10,  # How many pixels each "box" or module is
+    border=4,  # How many boxes thick the border should be (minimum is 4)
+)
+
+# 2. Add data to the object and compile the code
+DATA = "MJL QR Code Test"
+qr.add_data(DATA)
+qr.make(fit=True)  # Ensures the entire dimension is used
+
+# 3. Create the final image with custom colors
+img = qr.make_image(fill_color="darkblue", back_color="white")
+
+# 4. Save the image to a file
+img.save("custom_qrcode1.png")
+
+print("Customized QR Code generated and saved as custom_qrcode.png")
+# EOF
