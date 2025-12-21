@@ -30,9 +30,11 @@ def main():
 
     :return: None
     """
+    print()
     print("Let's convert some temperatures!")
     while True:
 
+        print()
         conversion_type: str = input(
             "Celsius to Fahrenheit(C) or Fahrenheit to Celsius(F)? C or F:").upper()
         if conversion_type not in ("C", "F"):
@@ -51,10 +53,13 @@ def main():
             print(f"{temp} °C is {converted_temp:.1f} °F.")
         else:
             converted_temp = fahrenheit_to_celsius(temp)
-            print(f"{temp} °F is {converted_temp:.1f} °C.")
+            print(f"{temp} °F is {converted_temp:.1f} \u00B0C.")
+            
+        print()
 
-        repeat: str = input("Would you like to convert another temperature? Y or N:").upper()
+        repeat = input("Would you like to convert another temperature? Y or N:").upper()
         if repeat != "Y":
+            print()
             break
 
 if __name__ == "__main__":
