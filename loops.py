@@ -4,7 +4,7 @@ Nested Loops Example"""
 
 # Just learning
 MESSAGE = "Looping in Python!"
-RANGE = 5
+RANGE = 4
 COUNTER = 0
 OUTERCOUNTER = 0
 
@@ -12,6 +12,7 @@ OUTERCOUNTER = 0
 for _ in range(RANGE):
     OUTERCOUNTER += 1
     INNERCOUNTER = 0
+
     for _ in range(RANGE):
         INNERCOUNTER += 1
         print(f"Outer Loop: {OUTERCOUNTER}")
