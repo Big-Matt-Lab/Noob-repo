@@ -8,9 +8,8 @@ def roll_dice(num_dice):
     """Rolls a specified number of dice and returns a list of results."""
     return [random.randint(1, 6) for _ in range(num_dice)]
 
-def reroll_selected(my_dice, indices_to_reroll):
+def reroll_selected(dice_list, indices_to_reroll):
     """Rerolls dice at specific indices in a list and updates the list."""
-    dice_list = my_dice
     for index in indices_to_reroll:
         if 0 <= index < len(dice_list):
             # Roll a new die and update the list at that specific index
@@ -42,10 +41,10 @@ def check_pairs_sets(ranks):
     else:
         return "No pairs or sets"
 
-def check_straight(my_dice):
+def check_straight(straight_dice):
     """Checks if the hand is a straight (consecutive ranks)."""
     # Use a set to remove duplicates, then sort
-    unique_ranks = sorted(list(set(my_dice)))
+    unique_ranks = sorted(list(set(straight_dice)))
     if len(unique_ranks) < 5: # A straight requires 5 unique cards
         return "No straight"
 
@@ -63,14 +62,14 @@ print(check_straight(my_dice))
 
 dice_to_reroll_str = input('Enter the dice positions to reroll separated by a spacee.g., 1 3 5): ')
 
-indices_to_reroll = []
+dice_to_reroll = []
 try:
     # Convert space-separated string of numbers to a list of 0-based integers
-    indices_to_reroll = [int(i) - 1 for i in dice_to_reroll_str.split()]
+    dice_to_reroll = [int(i) - 1 for i in dice_to_reroll_str.split()]
 except ValueError:
     print("Invalid input. Please enter only numbers separated by spaces.")
 
-my_dice = reroll_selected(my_dice, indices_to_reroll)
+my_dice = reroll_selected(my_dice, dice_to_reroll)
 
 my_dice.sort()
 print(my_dice)
