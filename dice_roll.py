@@ -56,10 +56,9 @@ def reroll_dice(current_dice, keep_status):
     return new_dice
 
 
-# Main game loop
 def main():
     """
-    Docstring for play_dice_game
+    Docstring for main
     """
     print("Welcome to the Dice Roller!")
 
