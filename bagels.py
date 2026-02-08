@@ -3,7 +3,7 @@ A deductive logic game where you must guess a number based on clues.
 """
 
 import random
-
+import sys
 NUM_DIGITS = 2
 MAX_GUESSES = 10
 
@@ -15,9 +15,9 @@ By Al Sweigart
 I am thinking of a {NUM_DIGITS}-digit number with no repeated digits.end
 Try to guess what it is. Here are some clues:
 When I say:      That means:
-  Pico              One digit is correct but in the wrong position.
-  Fermi           One digit is correct and in the right position.
-  Bagels            No digit is correct.  
+  Pico      One digit is correct but in the wrong position.
+  Fermi     One digit is correct and in the right position.
+  Bagels    No digit is correct.  
 
   For example, if the secret number was 248 and your guess was 843, the
   clues woud be Fermi, Pico.''')
@@ -33,6 +33,8 @@ When I say:      That means:
             while len(guess) != NUM_DIGITS or not guess.isdecimal():
                 print('Guess #{}: '.format(numGuesses))
                 guess = input('> ')
+                if guess == 'q':
+                    sys.exit()
 
             clues = getClues(guess, secretNum)
             print(clues)
