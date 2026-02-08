@@ -11,39 +11,52 @@ WORD_LIST = [
   'hide', 'need', 'sale', 'chat'
 ]
 
-MAX_GUESSES = 5 # Change Mac guessed to whatever practical number you need
+MAX_GUESSES = 5 # Change Max guesses to whatever practical number you need
 
 def get_secret_word() -> str:
-  """ Selects the secret word from a list"""
-  no params
-  returns: chosen word  
-  word = random.choice(WORD_LIST)
-  return word
+    """ Selects the secret word from a list
+    no params
+    returns: chosen word"""
+
+    word = random.choice(WORD_LIST)
+    return word
 
 def intro():
-  """ Opening greeting and explanation """
-  pass
+    """ Opening greeting and explanation """
+
 
 def get_users_word() -> str:
-  """ Input routine 
-  called by loop.
-  no params
-  # guess = 'thin'
-  # if guess not in word_list:
-  #   print("Not a word!")
-  returns word (str)"""
-  pass
+    """ Input routine 
+    called by loop.
+    no params
+    # guess = 'thin'
+    # if guess not in word_list:
+    #   print("Not a word!")
+    returns word (str)"""
 
-def check_word(guess: str, secret_word: str) -> str:
-  """ Check routine
-  checks character by character for match and 
-  provides feedback to user.
-  param: guess: users input (str)
-  param: secret_word: randomly selected secret word. 
-  returns: feedback"""
+    num_guesses = 0
+    while num_guesses <= MAX_GUESSES:
+        guess = ''
+        # keep looping until valid guess
+        while len(guess) != 4 or not guess.isalpha():
+            print('Guess #{}: '.format(num_guesses))
+            guess = input('> ')
+            if guess == 'q':
+                print("Thanks for playing!")
+                sys.exit()
+            return guess
+
+def get_clues(guess: str, secret_word: str) -> str:
+    """ Check routine
+    checks character by character for match and 
+    provides feedback to user.
+    param: guess: users input (str)
+    param: secret_word: randomly selected secret word. 
+    returns: feedback"""
 
     if guess == secret_word:
-      return "You got it!"
+        return "You got it!"
+
     clues = []
 
     for i in range(len(guess)):
@@ -56,39 +69,27 @@ def check_word(guess: str, secret_word: str) -> str:
     if len(clues) == 0:
         return 'Bagels' # There are no correct digits at all
     else:
-        # Sort the clues into alphabetical order so their order 
+        # Sort the clues into alphabetical order so their order
         # doesn't give anything away
         clues.sort()
         # Make a single string from the list of clues
         return ' '.join(clues)
 
 
-def main:
-  """ Main program """
-  intro()
+def main():
+    """ Main program """
+    intro()
 
-  secret_word = get_secret_word()
+    secret_word = get_secret_word()
 
-  while True:
-    print("The word has been chosen. Begin.")
-    numGuesses = 1
-    while numGuesses <= MAX_GUESSES:
-        guess = ''
-        # keep looping until valid guess
-        while len(guess) != 4 or not guess.isstr():
-                print('Guess #{}: '.format(numGuesses))
-                guess = input('> ')
-                if guess == 'q':
-                    sys.exit()
-        for i in number_of_guesses:
-          guess = get_users_word()
-          check_word(guess, secret_word)
+    while True:
+        print("The word has been chosen. Begin.")
 
-     
-      
+        guess = get_users_word()
+        get_clues(guess, secret_word)
+
+
 # TODO
-
-
 
 # write intro and rules
 # Get user input
@@ -101,4 +102,6 @@ def main:
 # Play again routine
 # Expand word list
 if __name__ == "__main__":
-  main()
+    main()
+
+# EOF
