@@ -5,7 +5,7 @@ import sys
 WORD_LIST = [
   'feel', 'dark', 'hear', 'cold', 'gone', 'list',
   'fine', 'cool', 'card', 'cute', 'life', 'hope', 'calm', 
-  'away', 'say', 'hair', 'nine', 'exit', 'push', 'keep', 'fell', 
+  'away', 'hair', 'nine', 'exit', 'push', 'keep', 'fell', 
   'fact', 'city', 'sell', 'rice', 'four', 'game', 'busy', 'able', 
   'word', 'pull', 'back', 'five', 'baby', 'fair', 'base',
   'hide', 'need', 'sale', 'chat'
@@ -25,7 +25,7 @@ def intro():
     """ Opening greeting and explanation """
 
 
-def get_users_word() -> str:
+def get_users_word():
     """ Input routine 
     called by loop.
     no params
@@ -39,14 +39,15 @@ def get_users_word() -> str:
         guess = ''
         # keep looping until valid guess
         while len(guess) != 4 or not guess.isalpha():
-            print('Guess #{}: '.format(num_guesses))
+            print(f'Guess #{num_guesses}: ')
             guess = input('> ')
+            guess = guess.lower()
             if guess == 'q':
                 print("Thanks for playing!")
                 sys.exit()
             return guess
 
-def get_clues(guess: str, secret_word: str) -> str:
+def get_clues(guess, secret_word):
     """ Check routine
     checks character by character for match and 
     provides feedback to user.
@@ -59,21 +60,17 @@ def get_clues(guess: str, secret_word: str) -> str:
 
     clues = []
 
-    for i in range(len(guess)):
-        if guess[i] == secret_word[i]:
+    for i, char in enumerate(guess):
+        if char == secret_word[i]:
             # A correct letter is in the correct place
-            clues.append('Fermi')
-        elif guess[i] in secret_word[i]:
+            clues.append('Correct ')
+        elif char in secret_word:
             # A correct letter is in the incorrect place
-            clues.append('Pico')
-    if len(clues) == 0:
-        return 'Bagels' # There are no correct digits at all
-    else:
-        # Sort the clues into alphabetical order so their order
-        # doesn't give anything away
-        clues.sort()
-        # Make a single string from the list of clues
-        return ' '.join(clues)
+            clues.append('Close ')
+        else:
+            clues.append('No ')
+
+    return clues
 
 
 def main():
@@ -81,12 +78,17 @@ def main():
     intro()
 
     secret_word = get_secret_word()
+    print("The word has been chosen. Begin.")
+    print(secret_word) # REMOVE THIS BEFORE FINAL
+    guesses = 1
 
-    while True:
-        print("The word has been chosen. Begin.")
-
+    while guesses <= MAX_GUESSES:
         guess = get_users_word()
-        get_clues(guess, secret_word)
+        feedback = get_clues(guess, secret_word)
+        print(feedback)
+        if guess == secret_word:
+            break
+        guesses += 1
 
 
 # TODO
