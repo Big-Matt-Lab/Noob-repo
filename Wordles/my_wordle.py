@@ -27,6 +27,10 @@ ALLOWED_WORD_LIST.update(GAME_WORD_LIST)
 MAX_GUESSES = 6 # Change Max guesses to whatever practical number you need
 WORD_LENGTH = 5
 
+COLOR_CORRECT = "#6aaa64" # Green
+COLOR_PRESENT = "#c9b458" # Yellow
+COLOR_ABSENT = "#787c7e"  # Grey
+
 class WordleApp:
     """
     Docstring for WordleApp
@@ -45,7 +49,8 @@ class WordleApp:
         self.start_new_game()
 
     def setup_ui(self):
-        # Title
+        """ Game setup
+        """
         tk.Label(self.root, text="WORDLE", font=("Helvetica", 24, "bold")).pack(pady=10)
 
         # Grid Frame
@@ -124,6 +129,12 @@ class WordleApp:
                 self.cells[row][col].config(text="", bg="white")
 
     def handle_guess(self, event=None):
+        """
+        Docstring for handle_guess
+        
+        :param self: Description
+        :param event: Description
+        """
         if not self.game_active:
             return
         guess = self.current_guess_str.get().strip().lower()
@@ -174,13 +185,13 @@ class WordleApp:
 
         secret_list = list(self.secret_word)
         guess_list = list(guess)
-        colors = ["#787c7e"] * WORD_LENGTH # Default Grey
+        colors = [COLOR_ABSENT] * WORD_LENGTH
 
         # Pass 1: Greens
         for i in range(WORD_LENGTH):
             self.cells[row][i].config(text=guess_list[i].upper())
             if guess_list[i] == secret_list[i]:
-                colors[i] = "#6aaa64" # Green
+                colors[i] = COLOR_CORRECT
                 secret_list[i] = None # Mark as used
                 guess_list[i] = None # Mark as handled
 
@@ -188,7 +199,7 @@ class WordleApp:
         for i in range(WORD_LENGTH):
             if guess_list[i] is not None: # If not already green
                 if guess_list[i] in secret_list:
-                    colors[i] = "#c9b458" # Yellow
+                    colors[i] = COLOR_PRESENT
                     secret_list[secret_list.index(guess_list[i])] = None # Mark first occurrence
 
         # Apply colors
