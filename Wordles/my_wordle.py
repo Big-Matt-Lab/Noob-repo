@@ -39,6 +39,7 @@ class WordleApp:
         self.secret_word = ""
         self.guesses_count = 0
         self.current_guess_str = tk.StringVar()
+        self.game_active = True
 
         self.setup_ui()
         self.start_new_game()
@@ -69,16 +70,10 @@ class WordleApp:
                 row_cells.append(lbl)
             self.cells.append(row_cells)
 
-        # Input Frame
-        input_frame = tk.Frame(self.root)
-        input_frame.pack(pady=20)
-
-        self.entry = tk.Entry(input_frame, textvariable=self.current_guess_str, font=("Helvetica", 14), width=10)
-        self.entry.pack(side=tk.LEFT, padx=5)
-        self.entry.bind("<Return>", self.handle_guess)
-
-        btn = tk.Button(input_frame, text="Guess", command=self.handle_guess)
-        btn.pack(side=tk.LEFT, padx=5)
+        # Bind keyboard events
+        self.root.bind("<Key>", self._handle_keypress)
+        self.root.bind("<BackSpace>", self._handle_backspace)
+        self.root.bind("<Return>", self.handle_guess)
 
         # Message Label
         self.msg_label = tk.Label(self.root, text="", font=("Helvetica", 12))
@@ -86,6 +81,30 @@ class WordleApp:
 
         # Restart Button
         tk.Button(self.root, text="New Game", command=self.start_new_game).pack(pady=5)
+
+    def _handle_keypress(self, event):
+        if not self.game_active:
+            return
+
+        key = event.char.lower()
+        current_guess_text = self.current_guess_str.get()
+
+        if 'a' <= key <= 'z' and len(current_guess_text) < WORD_LENGTH:
+            self.current_guess_str.set(current_guess_text + key)
+            col = len(current_guess_text)
+            self.cells[self.guesses_count][col].config(text=key.upper())
+            self.msg_label.config(text="") # Clear error messages on valid keypress
+
+    def _handle_backspace(self, event):
+        if not self.game_active:
+            return
+
+        current_guess_text = self.current_guess_str.get()
+        if current_guess_text:
+            self.current_guess_str.set(current_guess_text[:-1])
+            col = len(current_guess_text)
+            self.cells[self.guesses_count][col - 1].config(text="")
+            self.msg_label.config(text="") # Clear error messages on backspace
 
     def start_new_game(self):
         """
@@ -96,8 +115,7 @@ class WordleApp:
         self.secret_word = random.choice(GAME_WORD_LIST)
         self.guesses_count = 0
         self.current_guess_str.set("")
-        self.entry.config(state="normal")
-        self.entry.focus_set()
+        self.game_active = True
         self.msg_label.config(text=f"Guess the {WORD_LENGTH}-letter word!", fg="black")
 
         # Reset grid
@@ -106,12 +124,8 @@ class WordleApp:
                 self.cells[row][col].config(text="", bg="white")
 
     def handle_guess(self, event=None):
-        """
-        Docstring for handle_guess
-        
-        :param self: Description
-        :param event: Description
-        """
+        if not self.game_active:
+            return
         guess = self.current_guess_str.get().strip().lower()
 
         if self.guesses_count >= MAX_GUESSES:
@@ -137,11 +151,11 @@ class WordleApp:
 
         if guess == self.secret_word:
             self.msg_label.config(text="You Won! \U0001F389", fg="green")
-            self.entry.config(state="disabled")
+            self.game_active = False
             messagebox.showinfo("Winner", "Congratulations! You guessed the word!")
         elif self.guesses_count >= MAX_GUESSES:
             self.msg_label.config(text=f"Game Over. Word was: {self.secret_word.upper()}", fg="red")
-            self.entry.config(state="disabled")
+            self.game_active = False
             messagebox.showinfo("Game Over", f"The word was {self.secret_word.upper()}")
 
 
